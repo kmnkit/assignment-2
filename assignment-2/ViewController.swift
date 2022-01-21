@@ -18,22 +18,23 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        [numberTextField1, numberTextField2].forEach { textField in
-            textField?.keyboardType = .numberPad
-            textField?.delegate = self
+
+        let textFields: [UITextField] = [numberTextField1, numberTextField2]
+        textFields.forEach { textField in
+            textField.keyboardType = .numberPad
+            textField.delegate = self
         }
     }
 
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-            string.rangeOfCharacter(from: NSCharacterSet.decimalDigits) != nil
-        }
+        string.rangeOfCharacter(from: NSCharacterSet.decimalDigits) != nil
+    }
     
     @IBAction func tapCalculateButton(_ sender: UIButton) {
-        let number1 = Double(numberTextField1.text!) ?? 0
-        let number2 = Double(numberTextField2.text!) ?? 0
+        let number1 = Double(numberTextField1.text ?? "") ?? 0
+        let number2 = Double(numberTextField2.text ?? "") ?? 0
         
-        switch self.segmentedControl.selectedSegmentIndex {
+        switch segmentedControl.selectedSegmentIndex {
         case 0:
             resultLabel.text = "\(number1 + number2)"
         case 1:
@@ -43,9 +44,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
         case 3:
             if number2 == 0 {
                 resultLabel.text = "割る数には0以外を入力して下さい"
-                return
+            } else {
+                resultLabel.text = "\(number1 / number2)"
             }
-            resultLabel.text = "\(number1 / number2)"
         default:
             return
         }
