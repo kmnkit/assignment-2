@@ -18,20 +18,22 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        [numberTextField1, numberTextField2].forEach { textField in
-            textField?.keyboardType = .numberPad
-            textField?.delegate = self
+        // 이렇게 리스트로 넣으면 ?를 안 써도 됨.
+        let textFields: [UITextField] = [numberTextField1, numberTextField2]
+        textFields.forEach { textField in
+            textField.keyboardType = .numberPad
+            textField.delegate = self
         }
     }
 
+    // 인덴트 수정
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-            string.rangeOfCharacter(from: NSCharacterSet.decimalDigits) != nil
-        }
+        string.rangeOfCharacter(from: NSCharacterSet.decimalDigits) != nil
+    }
     
     @IBAction func tapCalculateButton(_ sender: UIButton) {
-        let number1 = Double(numberTextField1.text!) ?? 0
-        let number2 = Double(numberTextField2.text!) ?? 0
+        let number1 = Double(numberTextField1.text ?? "") ?? 0
+        let number2 = Double(numberTextField2.text ?? "") ?? 0
         
         switch self.segmentedControl.selectedSegmentIndex {
         case 0:
@@ -41,11 +43,12 @@ class ViewController: UIViewController, UITextFieldDelegate {
         case 2:
             resultLabel.text = "\(number1 * number2)"
         case 3:
+            // if...else 쪽이 의도 파악 하기 좋음.
             if number2 == 0 {
                 resultLabel.text = "割る数には0以外を入力して下さい"
-                return
+            } else {
+                resultLabel.text = "\(number1 / number2)"
             }
-            resultLabel.text = "\(number1 / number2)"
         default:
             return
         }
